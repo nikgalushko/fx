@@ -1,5 +1,13 @@
 package main
 
+import (
+	"time"
+	"math/rand"
+)
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func each[T any](arr []T, f func(T)) {
 	for _, v := range arr {
@@ -90,4 +98,100 @@ func groupBy[T any, M comparable](arr []T, f func(T) M) map[M][]T {
 	}
 
 	return ret
+}
+
+func sample[T any](arr []T) T {
+	return arr[rand.Intn(len(arr))]
+}
+
+func sampleN[T any](arr []T, n int) []T {
+	indexes := make([]int, len(arr))
+	for i := 0; i < len(indexes); i++ {
+		indexes[i] = i
+	}
+
+	rand.Shuffle(len(indexes), func(i, j int) {
+		indexes[i], indexes[j] = indexes[j], indexes[i]
+	})
+
+	ret := make([]T, n)
+	for i := 0; i < n; i++ {
+		ret[i] = arr[indexes[i]]
+	}
+
+	return ret
+}
+
+func union[T comparable](arr ...[]T) []T {
+	if len(arr) == 0 {
+		return nil
+	}
+
+	if len(arr) == 1 {
+		return arr[0]
+	}
+
+	ret := make([]T, 0, len(arr[0]))
+	m := make(map[T]struct{})
+	for _, array := range arr {
+		for i := 0; i < len(array); i++ {
+			if _, ok := m[array[i]]; !ok {
+				ret = append(ret, array[i])
+				m[array[i]] = struct{}{}
+			}
+		}
+	}
+
+	return ret
+}
+
+func intersection[T comparable](arr ...[]T) []T {
+	m := make(map[T]struct{})
+	for _, array := range arr {
+		for i := 0; i < len(array); i++ {
+			m[array[i]] = struct{}{}
+		}
+	}
+
+	ret := make([]T, 0, len(m))
+	for _, v := range m {
+		ret = append(ret, v)
+	}
+
+	return ret
+}
+
+func uniq[T comparable](arr []T) []T {
+	m := make(map[T]struct{})
+	for i := 0; i < len(arr); i++ {
+		m[arr[i]] = struct{}{}
+	}
+
+
+	ret := make([]T, 0, len(m))
+	for _, v := range m {
+		ret = append(ret, v)
+	}
+
+	return ret
+}
+
+func indexOf[T comparable](arr []T, value T) int {
+	for i := 0; i < len(arr); i++ {
+		if arr[i] == value {
+			return i
+		}
+	}
+
+	return -1
+}
+
+func lastIndexOf[T comparable](arr []T, value T) int {
+	for i := len(arr) - 1; i >= 0; i-- {
+		if arr[i] == value {
+			return i
+		}
+	}
+
+	return -1
 }
