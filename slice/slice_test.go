@@ -70,3 +70,20 @@ func TestGroupBy(t *testing.T) {
 
 	equal(group, map[int][]string{3: {"one", "two"}, 5: {"three"}}, "TestGroupBy")
 }
+
+func TestSample(t *testing.T) {
+	arr := []int{1, 2, 3, 4}
+	v := sample(arr)
+
+	equal(true, contains(arr, v), "TestSample")
+}
+
+func TestSampleN(t *testing.T) {
+	arr := []int{11, 12, 13, 14, 15, 16, 17, 18, 19}
+	samples := sampleN(arr, 5)
+
+	equal(len(uniq(samples)), len(samples), "TestSampleN")
+	for _, v := range samples {
+		equal(true, contains(arr, v), "TestSampleN")
+	}
+}
