@@ -1,4 +1,4 @@
-package main
+package slice
 
 import (
 	"time"
@@ -154,8 +154,8 @@ func intersection[T comparable](arr ...[]T) []T {
 	}
 
 	ret := make([]T, 0, len(m))
-	for _, v := range m {
-		ret = append(ret, v)
+	for k := range m {
+		ret = append(ret, k)
 	}
 
 	return ret
@@ -169,8 +169,8 @@ func uniq[T comparable](arr []T) []T {
 
 
 	ret := make([]T, 0, len(m))
-	for _, v := range m {
-		ret = append(ret, v)
+	for k := range m {
+		ret = append(ret, k)
 	}
 
 	return ret
