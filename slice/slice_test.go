@@ -1,6 +1,10 @@
 package slice
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+	"reflect"
+)
 
 func TestEach(t *testing.T) {
 	sum := 0
@@ -85,5 +89,44 @@ func TestSampleN(t *testing.T) {
 	equal(len(uniq(samples)), len(samples), "TestSampleN")
 	for _, v := range samples {
 		equal(true, contains(arr, v), "TestSampleN")
+	}
+}
+
+func TestUnion(t *testing.T) {
+	arr1 := []string{"a", "b", "c"}
+	arr2 := []string{"b", "c", "d"}
+
+	equal(union(arr1, arr2), []string{"a", "b", "c", "d"}, "TestUnion")
+}
+
+func TestIntersection(t *testing.T) {
+	arr1 := []string{"a", "b", "c"}
+	arr2 := []string{"b", "c", "d"}
+
+	equal(intersection(arr1, arr2), []string{"b", "c"}, "TestIntersaction")
+}
+
+func TestIndexOf(t *testing.T) {
+	equal(indexOf([]int{1, 2, 3, 2}, 2), 1, "TestIndexOf")
+	equal(indexOf([]int{1, 2, 3, 4}, 20), -1, "TestIndexOf not found")
+}
+
+func TestLastIndexOf(t *testing.T) {
+	equal(lastIndexOf([]int{1, 2, 3, 2}, 2), 3, "TestLastIndexOf")
+	equal(lastIndexOf([]int{1, 2, 3, 4}, 20), -1, "TestLastIndexOf not found")
+}
+
+func TestMinMax(t *testing.T) {
+	arr := []int{10, 2, 1,4, 19}
+	
+	equal(max(arr), 19, "TestMinMax")
+	equal(min(arr), 1, "TestMinMax")
+}
+
+func equal[T any](actual, expected T, title string) {
+	if !reflect.DeepEqual(actual, expected) {
+		panic(fmt.Sprintf("actual %v != expected %v", actual, expected))
+	} else {
+		fmt.Println(title + " - OK")
 	}
 }

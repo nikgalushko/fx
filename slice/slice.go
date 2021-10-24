@@ -1,6 +1,7 @@
 package slice
 
 import (
+	"constraints"
 	"time"
 	"math/rand"
 )
@@ -86,8 +87,29 @@ func contains[T comparable](arr []T, value T) bool {
 	return false
 }
 
-func max() {}
-func min() {}
+func max[T constraints.Ordered](arr []T) T {
+	e := arr[0]
+
+	for i := 1; i < len(arr); i++ {
+		if arr[i] > e {
+			e = arr[i]
+		}
+	}
+
+	return e
+}
+
+func min[T constraints.Ordered](arr []T) T {
+	e := arr[0]
+
+	for i := 1; i < len(arr); i++ {
+		if arr[i] < e {
+			e = arr[i]
+		}
+	}
+
+	return e
+}
 
 func groupBy[T any, M comparable](arr []T, f func(T) M) map[M][]T {
 	ret := make(map[M][]T)
@@ -147,15 +169,15 @@ func union[T comparable](arr ...[]T) []T {
 
 func intersection[T comparable](arr ...[]T) []T {
 	m := make(map[T]struct{})
+	var ret []T
+
 	for _, array := range arr {
 		for i := 0; i < len(array); i++ {
+			if _, ok := m[array[i]]; ok {
+				ret = append(ret, array[i])
+			}
 			m[array[i]] = struct{}{}
 		}
-	}
-
-	ret := make([]T, 0, len(m))
-	for k := range m {
-		ret = append(ret, k)
 	}
 
 	return ret
