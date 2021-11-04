@@ -2,21 +2,21 @@ package slice
 
 import (
 	"constraints"
-	"time"
 	"math/rand"
+	"time"
 )
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-func each[T any](arr []T, f func(T)) {
+func Each[T any](arr []T, f func(T)) {
 	for _, v := range arr {
 		f(v)
 	}
 }
 
-func collect[T any, M any](arr []T, f func(T) M) []M {
+func Collect[T any, M any](arr []T, f func(T) M) []M {
 	ret := make([]M, len(arr))
 
 	for i, v := range arr {
@@ -26,7 +26,7 @@ func collect[T any, M any](arr []T, f func(T) M) []M {
 	return ret
 }
 
-func reduce[T any](arr []T, f func(T,T) T, initial T) T {
+func Reduce[T any](arr []T, f func(T, T) T, initial T) T {
 	for _, v := range arr {
 		initial = f(initial, v)
 	}
@@ -34,7 +34,7 @@ func reduce[T any](arr []T, f func(T,T) T, initial T) T {
 	return initial
 }
 
-func find[T any](arr []T, f func(T) bool) (T, bool) {
+func Find[T any](arr []T, f func(T) bool) (T, bool) {
 	for _, v := range arr {
 		if f(v) {
 			return v, true
@@ -45,7 +45,7 @@ func find[T any](arr []T, f func(T) bool) (T, bool) {
 	return *n, false
 }
 
-func filter[T any](arr []T, f func(T) bool) []T {
+func Filter[T any](arr []T, f func(T) bool) []T {
 	var ret []T
 
 	for _, v := range arr {
@@ -57,7 +57,7 @@ func filter[T any](arr []T, f func(T) bool) []T {
 	return ret
 }
 
-func every[T any](arr []T, f func(T) bool) bool {
+func Every[T any](arr []T, f func(T) bool) bool {
 	for _, v := range arr {
 		if !f(v) {
 			return false
@@ -67,7 +67,7 @@ func every[T any](arr []T, f func(T) bool) bool {
 	return true
 }
 
-func some[T any](arr []T, f func(T) bool) bool {
+func Some[T any](arr []T, f func(T) bool) bool {
 	for _, v := range arr {
 		if f(v) {
 			return true
@@ -77,7 +77,7 @@ func some[T any](arr []T, f func(T) bool) bool {
 	return false
 }
 
-func contains[T comparable](arr []T, value T) bool {
+func Contains[T comparable](arr []T, value T) bool {
 	for _, v := range arr {
 		if v == value {
 			return true
@@ -87,7 +87,7 @@ func contains[T comparable](arr []T, value T) bool {
 	return false
 }
 
-func max[T constraints.Ordered](arr []T) T {
+func Max[T constraints.Ordered](arr []T) T {
 	e := arr[0]
 
 	for i := 1; i < len(arr); i++ {
@@ -99,7 +99,7 @@ func max[T constraints.Ordered](arr []T) T {
 	return e
 }
 
-func min[T constraints.Ordered](arr []T) T {
+func Min[T constraints.Ordered](arr []T) T {
 	e := arr[0]
 
 	for i := 1; i < len(arr); i++ {
@@ -111,7 +111,7 @@ func min[T constraints.Ordered](arr []T) T {
 	return e
 }
 
-func groupBy[T any, M comparable](arr []T, f func(T) M) map[M][]T {
+func GroupBy[T any, M comparable](arr []T, f func(T) M) map[M][]T {
 	ret := make(map[M][]T)
 
 	for _, v := range arr {
@@ -122,11 +122,11 @@ func groupBy[T any, M comparable](arr []T, f func(T) M) map[M][]T {
 	return ret
 }
 
-func sample[T any](arr []T) T {
+func Sample[T any](arr []T) T {
 	return arr[rand.Intn(len(arr))]
 }
 
-func sampleN[T any](arr []T, n int) []T {
+func SampleN[T any](arr []T, n int) []T {
 	indexes := make([]int, len(arr))
 	for i := 0; i < len(indexes); i++ {
 		indexes[i] = i
@@ -144,7 +144,7 @@ func sampleN[T any](arr []T, n int) []T {
 	return ret
 }
 
-func union[T comparable](arr ...[]T) []T {
+func Union[T comparable](arr ...[]T) []T {
 	if len(arr) == 0 {
 		return nil
 	}
@@ -167,7 +167,7 @@ func union[T comparable](arr ...[]T) []T {
 	return ret
 }
 
-func intersection[T comparable](arr ...[]T) []T {
+func Intersection[T comparable](arr ...[]T) []T {
 	m := make(map[T]struct{})
 	var ret []T
 
@@ -183,12 +183,11 @@ func intersection[T comparable](arr ...[]T) []T {
 	return ret
 }
 
-func uniq[T comparable](arr []T) []T {
+func Uniq[T comparable](arr []T) []T {
 	m := make(map[T]struct{})
 	for i := 0; i < len(arr); i++ {
 		m[arr[i]] = struct{}{}
 	}
-
 
 	ret := make([]T, 0, len(m))
 	for k := range m {
@@ -198,7 +197,7 @@ func uniq[T comparable](arr []T) []T {
 	return ret
 }
 
-func indexOf[T comparable](arr []T, value T) int {
+func IndexOf[T comparable](arr []T, value T) int {
 	for i := 0; i < len(arr); i++ {
 		if arr[i] == value {
 			return i
@@ -208,7 +207,7 @@ func indexOf[T comparable](arr []T, value T) int {
 	return -1
 }
 
-func lastIndexOf[T comparable](arr []T, value T) int {
+func LastIndexOf[T comparable](arr []T, value T) int {
 	for i := len(arr) - 1; i >= 0; i-- {
 		if arr[i] == value {
 			return i
