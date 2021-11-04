@@ -216,3 +216,9 @@ func LastIndexOf[T comparable](arr []T, value T) int {
 
 	return -1
 }
+
+func Reverse[T comparable](arr []T) {
+	for i := 0; i < len(arr)/2; i++ {
+		arr[i], arr[len(arr)-i-1] = arr[len(arr)-i-1], arr[i]
+	}
+}

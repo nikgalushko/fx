@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestEach(t *testing.T) {
@@ -121,6 +123,27 @@ func TestMinMax(t *testing.T) {
 
 	equal(Max(arr), 19, "TestMinMax")
 	equal(Min(arr), 1, "TestMinMax")
+}
+
+func TestReverse(t *testing.T) {
+	tests := map[string]struct {
+		in       []int
+		expected []int
+	}{
+		"even": {
+			in:       []int{0, 1, 2, 3},
+			expected: []int{3, 2, 1, 0},
+		},
+		"odd": {
+			in:       []int{0, 1, 2, 3, 4},
+			expected: []int{4, 3, 2, 1, 0},
+		},
+	}
+
+	for title, tt := range tests {
+		Reverse(tt.in)
+		require.Equal(t, tt.expected, tt.in, title)
+	}
 }
 
 func equal[T any](actual, expected T, title string) {
