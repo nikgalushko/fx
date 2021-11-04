@@ -1,8 +1,6 @@
 package slice
 
 import (
-	"fmt"
-	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -14,7 +12,7 @@ func TestEach(t *testing.T) {
 		sum += i
 	})
 
-	equal(10, sum, "")
+	require.Equal(t, 10, sum)
 }
 
 func TestCollect(t *testing.T) {
@@ -22,7 +20,7 @@ func TestCollect(t *testing.T) {
 		return i * 2
 	})
 
-	equal([]int{2, 4, 6, 8}, arr, "TestCollect")
+	require.Equal(t, []int{2, 4, 6, 8}, arr)
 }
 
 func TestReduct(t *testing.T) {
@@ -30,99 +28,180 @@ func TestReduct(t *testing.T) {
 		return memo + s
 	}, "")
 
-	equal("blah", join, "TestReduct")
+	require.Equal(t, "blah", join)
 }
 
 func TestFind(t *testing.T) {
-	element, ok := Find([]int{1, 2, 3, 4, 5}, func(i int) bool { return i == 4 })
+	tests := map[string]struct {
+		arr     []int
+		f       func(int) bool
+		element int
+		ok      bool
+	}{
+		"found": {
+			arr:     []int{1, 2, 3, 4, 5},
+			f:       func(i int) bool { return i == 4 },
+			element: 4,
+			ok:      true,
+		},
+		"not found": {
+			arr:     []int{1, 2, 3, 4, 5},
+			f:       func(i int) bool { return i == 100 },
+			element: 0,
+			ok:      false,
+		},
+	}
 
-	equal(4, element, "TestFind")
-	equal(true, ok, "TestFind")
+	for title, tt := range tests {
+		element, ok := Find(tt.arr, tt.f)
 
-	element, ok = Find([]int{1, 2, 3, 4, 5}, func(i int) bool { return i == 100 })
-
-	equal(0, element, "TestFind")
-	equal(false, ok, "TestFind")
+		require.Equal(t, tt.element, element, title)
+		require.Equal(t, tt.ok, ok, title)
+	}
 }
 
 func TestFilter(t *testing.T) {
 	ret := Filter([]int{10, 1, 4, 20, 5, 2}, func(i int) bool { return i < 10 })
 
-	equal(ret, []int{1, 4, 5, 2}, "TestFilter")
+	require.Equal(t, []int{1, 4, 5, 2}, ret)
 }
 
 func TestEvery(t *testing.T) {
-	ret := Every([]int{10, 1, 4, 20, 5, 2}, func(i int) bool { return i >= 10 })
+	tests := map[string]struct {
+		arr      []int
+		f        func(int) bool
+		expected bool
+	}{
+		"not ok": {
+			arr:      []int{10, 1, 4, 20, 5, 2},
+			f:        func(i int) bool { return i >= 10 },
+			expected: false,
+		},
+		"ok": {
+			arr:      []int{10, 1, 4, 20, 5, 2},
+			f:        func(i int) bool { return i >= 0 },
+			expected: true,
+		},
+	}
 
-	equal(ret, false, "TestEvery")
-
-	ret = Every([]int{10, 1, 4, 20, 5, 2}, func(i int) bool { return i >= 0 })
-
-	equal(ret, true, "TestEvery")
+	for title, tt := range tests {
+		require.Equal(t, tt.expected, Every(tt.arr, tt.f), title)
+	}
 }
 
 func TestSome(t *testing.T) {
-	ret := Some([]int{10, 1, 4, 20, 5, 2}, func(i int) bool { return i >= 10 })
+	tests := map[string]struct {
+		arr      []int
+		f        func(int) bool
+		expected bool
+	}{
+		"not ok": {
+			arr:      []int{10, 1, 4, 20, 5, 2},
+			f:        func(i int) bool { return i < 0 },
+			expected: false,
+		},
+		"ok": {
+			arr:      []int{10, 1, 4, 20, 5, 2},
+			f:        func(i int) bool { return i >= 10 },
+			expected: true,
+		},
+	}
 
-	equal(ret, true, "TestSome")
+	for title, tt := range tests {
+		require.Equal(t, tt.expected, Some(tt.arr, tt.f), title)
+	}
+}
 
-	ret = Every([]int{10, 1, 4, 20, 5, 2}, func(i int) bool { return i < 0 })
+func TestContains(t *testing.T) {
+	tests := map[string]struct {
+		arr      []int
+		value    int
+		expected bool
+	}{
+		"contains": {
+			arr:      []int{1, 2, 10, 23, 4},
+			value:    4,
+			expected: true,
+		},
+		"doesn't contain": {
+			arr:      []int{1, 2, 10, 23, 4},
+			value:    423,
+			expected: false,
+		},
+	}
 
-	equal(ret, false, "TestSome")
+	for title, tt := range tests {
+		require.Equal(t, tt.expected, Contains(tt.arr, tt.value), title)
+	}
 }
 
 func TestGroupBy(t *testing.T) {
 	group := GroupBy([]string{"one", "two", "three"}, func(s string) int { return len(s) })
 
-	equal(group, map[int][]string{3: {"one", "two"}, 5: {"three"}}, "TestGroupBy")
+	require.Equal(t, map[int][]string{3: {"one", "two"}, 5: {"three"}}, group)
 }
 
 func TestSample(t *testing.T) {
 	arr := []int{1, 2, 3, 4}
 	v := Sample(arr)
 
-	equal(true, Contains(arr, v), "TestSample")
+	require.Equal(t, true, Contains(arr, v))
 }
 
 func TestSampleN(t *testing.T) {
 	arr := []int{11, 12, 13, 14, 15, 16, 17, 18, 19}
 	samples := SampleN(arr, 5)
 
-	equal(len(Uniq(samples)), len(samples), "TestSampleN")
+	require.Equal(t, len(Uniq(samples)), len(samples))
+
 	for _, v := range samples {
-		equal(true, Contains(arr, v), "TestSampleN")
+		require.Equal(t, true, Contains(arr, v))
 	}
 }
 
 func TestUnion(t *testing.T) {
-	arr1 := []string{"a", "b", "c"}
-	arr2 := []string{"b", "c", "d"}
+	tests := map[string]struct {
+		in       [][]string
+		expected []string
+	}{
+		"two arrays": {
+			in:       [][]string{{"a", "b", "c"}, {"b", "c", "d"}},
+			expected: []string{"a", "b", "c", "d"},
+		},
+		"zero arrays": {},
+		"one array": {
+			in:       [][]string{{"1", "2", "3"}},
+			expected: []string{"1", "2", "3"},
+		},
+	}
 
-	equal(Union(arr1, arr2), []string{"a", "b", "c", "d"}, "TestUnion")
+	for title, tt := range tests {
+		require.Equal(t, tt.expected, Union(tt.in...), title)
+	}
 }
 
 func TestIntersection(t *testing.T) {
 	arr1 := []string{"a", "b", "c"}
 	arr2 := []string{"b", "c", "d"}
 
-	equal(Intersection(arr1, arr2), []string{"b", "c"}, "TestIntersaction")
+	require.Equal(t, []string{"b", "c"}, Intersection(arr1, arr2))
 }
 
 func TestIndexOf(t *testing.T) {
-	equal(IndexOf([]int{1, 2, 3, 2}, 2), 1, "TestIndexOf")
-	equal(IndexOf([]int{1, 2, 3, 4}, 20), -1, "TestIndexOf not found")
+	require.Equal(t, 1, IndexOf([]int{1, 2, 3, 2}, 2), "found")
+	require.Equal(t, -1, IndexOf([]int{1, 2, 3, 4}, 20), "not found")
 }
 
 func TestLastIndexOf(t *testing.T) {
-	equal(LastIndexOf([]int{1, 2, 3, 2}, 2), 3, "TestLastIndexOf")
-	equal(LastIndexOf([]int{1, 2, 3, 4}, 20), -1, "TestLastIndexOf not found")
+	require.Equal(t, 3, LastIndexOf([]int{1, 2, 3, 2}, 2), "found")
+	require.Equal(t, -1, LastIndexOf([]int{1, 2, 3, 4}, 20), "not found")
 }
 
 func TestMinMax(t *testing.T) {
 	arr := []int{10, 2, 1, 4, 19}
 
-	equal(Max(arr), 19, "TestMinMax")
-	equal(Min(arr), 1, "TestMinMax")
+	require.Equal(t, 19, Max(arr), "max")
+	require.Equal(t, 1, Min(arr), "min")
 }
 
 func TestReverse(t *testing.T) {
@@ -143,13 +222,5 @@ func TestReverse(t *testing.T) {
 	for title, tt := range tests {
 		Reverse(tt.in)
 		require.Equal(t, tt.expected, tt.in, title)
-	}
-}
-
-func equal[T any](actual, expected T, title string) {
-	if !reflect.DeepEqual(actual, expected) {
-		panic(fmt.Sprintf("actual %v != expected %v", actual, expected))
-	} else {
-		fmt.Println(title + " - OK")
 	}
 }
