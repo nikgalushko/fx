@@ -25,3 +25,11 @@ func Each[K comparable, V any](m map[K]V, f func(key K, value V)) {
 		f(k, v)
 	}
 }
+
+func Filter[K comparable, V any](m map[K]V, f func(key K, value V) bool) {
+	for k, v := range m {
+		if f(k, v) {
+			delete(m, k)
+		}
+	}
+}

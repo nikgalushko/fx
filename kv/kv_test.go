@@ -57,3 +57,19 @@ func TestEach(t *testing.T) {
 	require.Equal(t, []int{1, 2, 3}, keys)
 	require.Equal(t, []string{"a", "b", "c"}, values)
 }
+
+func TestFilter(t *testing.T) {
+	m := map[int]string{
+		1: "one",
+		2: "two",
+		5: "five",
+		6: "six",
+		7: "seven",
+	}
+
+	Filter(m, func(key int, value string) bool {
+		return key < 3 || len(value) < 4
+	})
+
+	require.Equal(t, map[int]string{5: "five", 7: "seven"}, m)
+}
