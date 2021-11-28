@@ -10,13 +10,13 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-func Each[T any](arr []T, f func(T)) {
+func Each[A ~[]T, T any](arr A, f func(T)) {
 	for _, v := range arr {
 		f(v)
 	}
 }
 
-func Collect[T any, M any](arr []T, f func(T) M) []M {
+func Collect[A ~[]T, T any, M any](arr A, f func(T) M) []M {
 	ret := make([]M, len(arr))
 
 	for i, v := range arr {
@@ -26,7 +26,7 @@ func Collect[T any, M any](arr []T, f func(T) M) []M {
 	return ret
 }
 
-func Reduce[T any](arr []T, f func(T, T) T, initial T) T {
+func Reduce[A ~[]T, T any](arr A, f func(T, T) T, initial T) T {
 	for _, v := range arr {
 		initial = f(initial, v)
 	}
@@ -34,7 +34,7 @@ func Reduce[T any](arr []T, f func(T, T) T, initial T) T {
 	return initial
 }
 
-func Find[T any](arr []T, f func(T) bool) (T, bool) {
+func Find[A ~[]T, T any](arr A, f func(T) bool) (T, bool) {
 	for _, v := range arr {
 		if f(v) {
 			return v, true
@@ -45,8 +45,8 @@ func Find[T any](arr []T, f func(T) bool) (T, bool) {
 	return *n, false
 }
 
-func Filter[T any](arr []T, f func(T) bool) []T {
-	var ret []T
+func Filter[A ~[]T, T any](arr A, f func(T) bool) A {
+	var ret A
 
 	for _, v := range arr {
 		if f(v) {
@@ -57,7 +57,7 @@ func Filter[T any](arr []T, f func(T) bool) []T {
 	return ret
 }
 
-func Every[T any](arr []T, f func(T) bool) bool {
+func Every[A ~[]T, T any](arr A, f func(T) bool) bool {
 	for _, v := range arr {
 		if !f(v) {
 			return false
@@ -67,7 +67,7 @@ func Every[T any](arr []T, f func(T) bool) bool {
 	return true
 }
 
-func Some[T any](arr []T, f func(T) bool) bool {
+func Some[A ~[]T, T any](arr A, f func(T) bool) bool {
 	for _, v := range arr {
 		if f(v) {
 			return true
@@ -77,7 +77,7 @@ func Some[T any](arr []T, f func(T) bool) bool {
 	return false
 }
 
-func Contains[T comparable](arr []T, value T) bool {
+func Contains[A ~[]T, T comparable](arr A, value T) bool {
 	for _, v := range arr {
 		if v == value {
 			return true
@@ -87,7 +87,7 @@ func Contains[T comparable](arr []T, value T) bool {
 	return false
 }
 
-func Max[T constraints.Ordered](arr []T) T {
+func Max[A ~[]T, T constraints.Ordered](arr A) T {
 	e := arr[0]
 
 	for i := 1; i < len(arr); i++ {
@@ -99,7 +99,7 @@ func Max[T constraints.Ordered](arr []T) T {
 	return e
 }
 
-func Min[T constraints.Ordered](arr []T) T {
+func Min[A ~[]T, T constraints.Ordered](arr A) T {
 	e := arr[0]
 
 	for i := 1; i < len(arr); i++ {
@@ -111,8 +111,8 @@ func Min[T constraints.Ordered](arr []T) T {
 	return e
 }
 
-func GroupBy[T any, M comparable](arr []T, f func(T) M) map[M][]T {
-	ret := make(map[M][]T)
+func GroupBy[A ~[]T, T any, M comparable](arr A, f func(T) M) map[M]A {
+	ret := make(map[M]A)
 
 	for _, v := range arr {
 		m := f(v)
@@ -122,11 +122,11 @@ func GroupBy[T any, M comparable](arr []T, f func(T) M) map[M][]T {
 	return ret
 }
 
-func Sample[T any](arr []T) T {
+func Sample[A ~[]T, T any](arr A) T {
 	return arr[rand.Intn(len(arr))]
 }
 
-func SampleN[T any](arr []T, n int) []T {
+func SampleN[A ~[]T, T any](arr A, n int) []T {
 	indexes := make([]int, len(arr))
 	for i := 0; i < len(indexes); i++ {
 		indexes[i] = i
@@ -144,7 +144,7 @@ func SampleN[T any](arr []T, n int) []T {
 	return ret
 }
 
-func Union[T comparable](arr ...[]T) []T {
+func Union[A ~[]T, T comparable](arr ...A) A {
 	if len(arr) == 0 {
 		return nil
 	}
@@ -153,7 +153,7 @@ func Union[T comparable](arr ...[]T) []T {
 		return arr[0]
 	}
 
-	ret := make([]T, 0, len(arr[0]))
+	ret := make(A, 0, len(arr[0]))
 	m := make(map[T]struct{})
 	for _, array := range arr {
 		for i := 0; i < len(array); i++ {
@@ -167,9 +167,9 @@ func Union[T comparable](arr ...[]T) []T {
 	return ret
 }
 
-func Intersection[T comparable](arr ...[]T) []T {
+func Intersection[A ~[]T, T comparable](arr ...A) A {
 	m := make(map[T]struct{})
-	var ret []T
+	var ret A
 
 	for _, array := range arr {
 		for i := 0; i < len(array); i++ {
@@ -183,13 +183,13 @@ func Intersection[T comparable](arr ...[]T) []T {
 	return ret
 }
 
-func Uniq[T comparable](arr []T) []T {
+func Uniq[A ~[]T, T comparable](arr A) []T {
 	m := make(map[T]struct{})
 	for i := 0; i < len(arr); i++ {
 		m[arr[i]] = struct{}{}
 	}
 
-	ret := make([]T, 0, len(m))
+	ret := make(A, 0, len(m))
 	for k := range m {
 		ret = append(ret, k)
 	}
@@ -197,7 +197,7 @@ func Uniq[T comparable](arr []T) []T {
 	return ret
 }
 
-func IndexOf[T comparable](arr []T, value T) int {
+func IndexOf[A ~[]T, T comparable](arr A, value T) int {
 	for i := 0; i < len(arr); i++ {
 		if arr[i] == value {
 			return i
@@ -207,7 +207,7 @@ func IndexOf[T comparable](arr []T, value T) int {
 	return -1
 }
 
-func LastIndexOf[T comparable](arr []T, value T) int {
+func LastIndexOf[A ~[]T, T comparable](arr A, value T) int {
 	for i := len(arr) - 1; i >= 0; i-- {
 		if arr[i] == value {
 			return i
@@ -217,7 +217,7 @@ func LastIndexOf[T comparable](arr []T, value T) int {
 	return -1
 }
 
-func Reverse[T comparable](arr []T) {
+func Reverse[A ~[]T, T comparable](arr A) {
 	for i := 0; i < len(arr)/2; i++ {
 		arr[i], arr[len(arr)-i-1] = arr[len(arr)-i-1], arr[i]
 	}
