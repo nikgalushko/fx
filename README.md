@@ -40,7 +40,9 @@ Documentation with examples can be found here: https://nikgalushko.github.io/fx/
 
 ## Installation
 
-`go get -u github.com/nikgalushko/fx`
+slice helpers `go get github.com/nikgalushko/fx/slice`
+map helpers `go get github.com/nikgalushko/fx/kv`
+channel helpers `go get github.com/nikgalushko/fx/ch`
 
 ## Usage
 
