@@ -4,7 +4,7 @@ import (
 	"sync"
 )
 
-func merge[T any](channels ...chan T) chan T {
+func Merge[T any](channels ...chan T) chan T {
 	ret := make(chan T)
 
 	var wg sync.WaitGroup

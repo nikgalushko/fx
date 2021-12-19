@@ -15,7 +15,7 @@ func TestMerge(t *testing.T) {
 		channels = append(channels, createChanFrom(arr))
 	}
 
-	ch := merge(channels...)
+	ch := Merge(channels...)
 	sum := 0
 
 	for v := range ch {
