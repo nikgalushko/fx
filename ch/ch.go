@@ -4,6 +4,7 @@ import (
 	"sync"
 )
 
+// Merge returns a channel containing the values from all channels.
 func Merge[T any](channels ...chan T) chan T {
 	ret := make(chan T)
 
