@@ -33,6 +33,7 @@ Support **only** Go 1.18+.
 
 ## Documentation
 
+Documentation with examples can be found here: https://nikgalushko.github.io/fx/
 
 ## Installation
 
