@@ -10,12 +10,14 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
+// Each calls the function on each item in the slice
 func Each[A ~[]T, T any](arr A, f func(T)) {
 	for _, v := range arr {
 		f(v)
 	}
 }
 
+// Collect returns a new slice of values by mapping each value of original slice through a transformation function.
 func Collect[A ~[]T, T any, M any](arr A, f func(T) M) []M {
 	ret := make([]M, len(arr))
 
@@ -26,6 +28,7 @@ func Collect[A ~[]T, T any, M any](arr A, f func(T) M) []M {
 	return ret
 }
 
+// Reduce reduces a slice of values to single value.
 func Reduce[A ~[]T, T any](arr A, f func(T, T) T, initial T) T {
 	for _, v := range arr {
 		initial = f(initial, v)
@@ -34,6 +37,8 @@ func Reduce[A ~[]T, T any](arr A, f func(T, T) T, initial T) T {
 	return initial
 }
 
+// Find returns the first element in the slice that matches the condition.
+// If slice doesn't contain an element it returns a default type value and false as second value.
 func Find[A ~[]T, T any](arr A, f func(T) bool) (T, bool) {
 	for _, v := range arr {
 		if f(v) {
@@ -45,6 +50,7 @@ func Find[A ~[]T, T any](arr A, f func(T) bool) (T, bool) {
 	return *n, false
 }
 
+// Filter returns all elements in the slice that mathch the condition.
 func Filter[A ~[]T, T any](arr A, f func(T) bool) A {
 	var ret A
 
@@ -57,6 +63,7 @@ func Filter[A ~[]T, T any](arr A, f func(T) bool) A {
 	return ret
 }
 
+// Every returns true if all elements match the condition.
 func Every[A ~[]T, T any](arr A, f func(T) bool) bool {
 	for _, v := range arr {
 		if !f(v) {
@@ -67,6 +74,7 @@ func Every[A ~[]T, T any](arr A, f func(T) bool) bool {
 	return true
 }
 
+// Some returns true if there is at least one element that satisfies the condition.
 func Some[A ~[]T, T any](arr A, f func(T) bool) bool {
 	for _, v := range arr {
 		if f(v) {
@@ -77,6 +85,7 @@ func Some[A ~[]T, T any](arr A, f func(T) bool) bool {
 	return false
 }
 
+// Contains returns true if value is present in the slice.
 func Contains[A ~[]T, T comparable](arr A, value T) bool {
 	for _, v := range arr {
 		if v == value {
@@ -87,6 +96,7 @@ func Contains[A ~[]T, T comparable](arr A, value T) bool {
 	return false
 }
 
+// Max returns the maximum value from the slice.
 func Max[A ~[]T, T constraints.Ordered](arr A) T {
 	e := arr[0]
 
@@ -99,6 +109,7 @@ func Max[A ~[]T, T constraints.Ordered](arr A) T {
 	return e
 }
 
+// Min returns the minimum value from the slice.
 func Min[A ~[]T, T constraints.Ordered](arr A) T {
 	e := arr[0]
 
@@ -111,6 +122,7 @@ func Min[A ~[]T, T constraints.Ordered](arr A) T {
 	return e
 }
 
+// GroupBy splits the slice into groups, grouped by the result of the function call.
 func GroupBy[A ~[]T, T any, M comparable](arr A, f func(T) M) map[M]A {
 	ret := make(map[M]A)
 
@@ -122,10 +134,12 @@ func GroupBy[A ~[]T, T any, M comparable](arr A, f func(T) M) map[M]A {
 	return ret
 }
 
+// Sample returns the random element from slice.
 func Sample[A ~[]T, T any](arr A) T {
 	return arr[rand.Intn(len(arr))]
 }
 
+// SampleN returns the N random elements from slice.
 func SampleN[A ~[]T, T any](arr A, n int) []T {
 	indexes := make([]int, len(arr))
 	for i := 0; i < len(indexes); i++ {
@@ -144,6 +158,7 @@ func SampleN[A ~[]T, T any](arr A, n int) []T {
 	return ret
 }
 
+// Union returns a slice of unique values from passed slices.
 func Union[A ~[]T, T comparable](arr ...A) A {
 	if len(arr) == 0 {
 		return nil
@@ -167,6 +182,7 @@ func Union[A ~[]T, T comparable](arr ...A) A {
 	return ret
 }
 
+// Intersection returns a slice of values that are in all passed slices.
 func Intersection[A ~[]T, T comparable](arr ...A) A {
 	m := make(map[T]struct{})
 	var ret A
@@ -183,6 +199,7 @@ func Intersection[A ~[]T, T comparable](arr ...A) A {
 	return ret
 }
 
+// Uniq returns a slice of unique values.
 func Uniq[A ~[]T, T comparable](arr A) []T {
 	m := make(map[T]struct{})
 	for i := 0; i < len(arr); i++ {
@@ -197,6 +214,8 @@ func Uniq[A ~[]T, T comparable](arr A) []T {
 	return ret
 }
 
+// IndexOf returns first index of the found element in the slice.
+// If slice doesn't contain an element it returns -1.
 func IndexOf[A ~[]T, T comparable](arr A, value T) int {
 	for i := 0; i < len(arr); i++ {
 		if arr[i] == value {
@@ -207,6 +226,7 @@ func IndexOf[A ~[]T, T comparable](arr A, value T) int {
 	return -1
 }
 
+// LastIndexOf like as IndexOf, but the search goes from the end.
 func LastIndexOf[A ~[]T, T comparable](arr A, value T) int {
 	for i := len(arr) - 1; i >= 0; i-- {
 		if arr[i] == value {
@@ -217,6 +237,7 @@ func LastIndexOf[A ~[]T, T comparable](arr A, value T) int {
 	return -1
 }
 
+// Reverse reverses the order of the elements in place.
 func Reverse[A ~[]T, T comparable](arr A) {
 	for i := 0; i < len(arr)/2; i++ {
 		arr[i], arr[len(arr)-i-1] = arr[len(arr)-i-1], arr[i]
