@@ -10,7 +10,7 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-// Each calls the function on each item in the slice
+// Each calls the function on each item in the slice.
 func Each[A ~[]T, T any](arr A, f func(T)) {
 	for _, v := range arr {
 		f(v)

@@ -67,9 +67,10 @@ func TestFilter(t *testing.T) {
 		7: "seven",
 	}
 
-	Filter(m, func(key int, value string) bool {
+	filtered := Filter(m, func(key int, value string) bool {
 		return key < 3 || len(value) < 4
 	})
 
-	require.Equal(t, map[int]string{5: "five", 7: "seven"}, m)
+	require.Equal(t, map[int]string{1: "one", 2: "two", 6: "six"}, filtered)
+	require.Len(t, m, 5)
 }
