@@ -1,4 +1,7 @@
 # fx
+[![Status](https://github.com/nikgalushko/fx/actions/workflows/go.yaml/badge.svg)](https://github.com/nikgalushko/fx/actions/workflows/go.yaml) [![Coverage Status](https://coveralls.io/repos/github/nikgalushko/fx/badge.svg?branch=main)](https://coveralls.io/github/nikgalushko/fx?branch=main)
+
+
 Fx is a useful functional programming helpers. 
 Support **only** Go 1.18+.
 
@@ -33,10 +36,13 @@ Support **only** Go 1.18+.
 
 ## Documentation
 
+Documentation with examples can be found here: https://nikgalushko.github.io/fx/
 
 ## Installation
 
-`go get -u github.com/nikgalushko/fx`
+slice helpers `go get github.com/nikgalushko/fx/slice`
+map helpers `go get github.com/nikgalushko/fx/kv`
+channel helpers `go get github.com/nikgalushko/fx/ch`
 
 ## Usage
 
