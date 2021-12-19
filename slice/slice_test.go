@@ -23,7 +23,7 @@ func TestCollect(t *testing.T) {
 	require.Equal(t, []int{2, 4, 6, 8}, arr)
 }
 
-func TestReduct(t *testing.T) {
+func TestReduce(t *testing.T) {
 	join := Reduce([]string{"b", "l", "a", "h"}, func(memo, s string) string {
 		return memo + s
 	}, "")
