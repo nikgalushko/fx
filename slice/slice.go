@@ -150,18 +150,17 @@ func Sample[A ~[]T, T any](arr A) T {
 
 // SampleN returns the N random elements from slice.
 func SampleN[A ~[]T, T any](arr A, n int) []T {
-	indexes := make([]int, len(arr))
-	for i := 0; i < len(indexes); i++ {
-		indexes[i] = i
+	if n < 0 {
+		return A{}
 	}
 
-	rand.Shuffle(len(indexes), func(i, j int) {
-		indexes[i], indexes[j] = indexes[j], indexes[i]
-	})
+	if n > len(arr) {
+		n = len(arr)
+	}
 
 	ret := make([]T, n)
-	for i := 0; i < n; i++ {
-		ret[i] = arr[indexes[i]]
+	for i, v := range rand.Perm(n) {
+		ret[i] = arr[v]
 	}
 
 	return ret

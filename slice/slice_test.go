@@ -149,13 +149,38 @@ func TestSample(t *testing.T) {
 }
 
 func TestSampleN(t *testing.T) {
-	arr := []int{11, 12, 13, 14, 15, 16, 17, 18, 19}
-	samples := SampleN(arr, 5)
+	check := func(arr, samples []int){
+		require.Equal(t, len(Uniq(samples)), len(samples))
 
-	require.Equal(t, len(Uniq(samples)), len(samples))
+		for _, v := range samples {
+			require.Equal(t, true, Contains(arr, v))
+		}
+	}
 
-	for _, v := range samples {
-		require.Equal(t, true, Contains(arr, v))
+	tests := []struct{
+		input []int
+		n int
+	}{
+		{
+			input: []int{11, 12, 13, 14, 15, 16, 17, 18, 19},
+			n: 5,
+		},
+		{
+			input: []int{0, 1, 2},
+			n: 1,
+		},
+		{
+			input: []int{0, 1, 2},
+			n: 100,
+		},
+		{
+			input: []int{0, 1, 2},
+			n: -10,
+		},
+	}
+	
+	for _, tt := range tests {
+		check(tt.input, SampleN(tt.input, tt.n))
 	}
 }
 
