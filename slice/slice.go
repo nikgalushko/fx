@@ -29,7 +29,7 @@ func Collect[A ~[]T, T any, M any](arr A, f func(T) M) []M {
 }
 
 // Reduce reduces a slice of values to single value.
-func Reduce[A ~[]T, T any](arr A, f func(T, T) T, initial T) T {
+func Reduce[A ~[]T, T any, M any](arr A, f func(M, T) M, initial M) M {
 	for _, v := range arr {
 		initial = f(initial, v)
 	}
@@ -46,8 +46,7 @@ func Find[A ~[]T, T any](arr A, f func(T) bool) (T, bool) {
 		}
 	}
 
-	n := new(T)
-	return *n, false
+	return defaultvalue[T](), false
 }
 
 // Filter returns all elements in the slice that mathch the condition.
@@ -171,7 +170,7 @@ func SampleN[A ~[]T, T any](arr A, n int) []T {
 // Union returns a slice of unique values from passed slices.
 func Union[A ~[]T, T comparable](arr ...A) A {
 	if len(arr) == 0 {
-		return nil
+		return A{}
 	}
 
 	if len(arr) == 1 {
@@ -267,7 +266,7 @@ func LastIndexOf[A ~[]T, T comparable](arr A, value T) int {
 }
 
 // Reverse reverses the order of the elements in place.
-func Reverse[A ~[]T, T comparable](arr A) {
+func Reverse[A ~[]T, T any](arr A) {
 	for i := 0; i < len(arr)/2; i++ {
 		arr[i], arr[len(arr)-i-1] = arr[len(arr)-i-1], arr[i]
 	}

@@ -168,7 +168,10 @@ func TestUnion(t *testing.T) {
 			in:       [][]string{{"a", "b", "c"}, {"b", "c", "d"}},
 			expected: []string{"a", "b", "c", "d"},
 		},
-		"zero arrays": {},
+		"zero arrays": {
+			in: nil,
+			expected: []string{},
+		},
 		"one array": {
 			in:       [][]string{{"1", "2", "3"}},
 			expected: []string{"1", "2", "3"},
