@@ -229,14 +229,14 @@ func Intersection[A ~[]T, T comparable](arr ...A) A {
 
 // Uniq returns a slice of unique values.
 func Uniq[A ~[]T, T comparable](arr A) []T {
+	ret := make(A, 0)
 	m := make(map[T]struct{})
-	for i := 0; i < len(arr); i++ {
-		m[arr[i]] = struct{}{}
-	}
 
-	ret := make(A, 0, len(m))
-	for k := range m {
-		ret = append(ret, k)
+	for _, elem := range arr {
+		if _, ok := m[elem]; !ok {
+			m[elem] = struct{}{}
+			ret = append(ret, elem)
+		}
 	}
 
 	return ret
