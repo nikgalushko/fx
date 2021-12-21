@@ -173,6 +173,10 @@ func TestUnion(t *testing.T) {
 			in:       [][]string{{"1", "2", "3"}},
 			expected: []string{"1", "2", "3"},
 		},
+		"three arrays": {
+			in:       [][]string{{"a", "b", "c"}, {"b", "c", "d"}, {"c", "d", "e"}},
+			expected: []string{"a", "b", "c", "d", "e"},
+		},
 	}
 
 	for title, tt := range tests {
@@ -181,10 +185,27 @@ func TestUnion(t *testing.T) {
 }
 
 func TestIntersection(t *testing.T) {
-	arr1 := []string{"a", "b", "c"}
-	arr2 := []string{"b", "c", "d"}
+	tests := map[string]struct{
+		in [][]string
+		expected []string
+	}{
+		"two arrays": {
+			in: [][]string{{"a", "b", "c"}, {"b", "c", "d"}},
+			expected: []string{"b", "c"},
+		},
+		"three arrays": {
+			in: [][]string{{"a", "b", "c"}, {"b", "c", "d"}, {"a", "f", "g", "c"}},
+			expected: []string{"c"},
+		},
+		"four arrays": {
+			in: [][]string{{"a", "b", "c"}, {"b", "c", "d"}, {"a", "f", "g", "c"}, {"k", "v"}},
+			expected: nil,
+		},
+	}
 
-	require.Equal(t, []string{"b", "c"}, Intersection(arr1, arr2))
+	for title, tt := range tests {
+		require.Equal(t, tt.expected, Intersection(tt.in...), title)
+	}
 }
 
 func TestIndexOf(t *testing.T) {

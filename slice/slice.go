@@ -184,16 +184,35 @@ func Union[A ~[]T, T comparable](arr ...A) A {
 
 // Intersection returns a slice of values that are in all passed slices.
 func Intersection[A ~[]T, T comparable](arr ...A) A {
-	m := make(map[T]struct{})
-	var ret A
+	if len(arr) == 0 {
+		return A{}
+	}
 
-	for _, array := range arr {
-		for i := 0; i < len(array); i++ {
-			if _, ok := m[array[i]]; ok {
-				ret = append(ret, array[i])
+	if len(arr) == 1 {
+		return arr[0]
+	}
+
+	ret := arr[0]
+	arr = arr[1:]
+
+	for len(arr) != 0 {
+		var nextPath A
+
+		part2 := arr[0]
+		m := make(map[T]struct{})
+
+		for _, array := range []A{ret, part2} {
+			for i := 0; i < len(array); i++ {
+				if _, ok := m[array[i]]; ok {
+					nextPath = append(nextPath, array[i])
+				} else {
+					m[array[i]] = struct{}{}
+				}
 			}
-			m[array[i]] = struct{}{}
 		}
+
+		ret = nextPath
+		arr = arr[1:]
 	}
 
 	return ret
