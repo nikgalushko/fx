@@ -79,7 +79,7 @@ ret := Contains([]int{1, 2, 10, 23, 4}, 4)
 
 ## Max
 Max returns the maximum value from the slice.
-Is input slice is empty it returns a default value for input type.
+If input slice is empty it returns a default value for input type.
 
 ```
 arr := []int{10, 2, 1, 4, 19}
@@ -94,7 +94,7 @@ zero := Max([]int{})
 
 ## Min
 Min returns the minimum value from the slice.
-Is input slice is empty it returns a default value for input type.
+If input slice is empty it returns a default value for input type.
 
 ```
 arr := []int{10, 2, 1, 4, 19}
