@@ -189,6 +189,14 @@ func TestIntersection(t *testing.T) {
 		in [][]string
 		expected []string
 	}{
+		"without arrays": {
+			in: [][]string{},
+			expected: []string{},
+		},
+		"single array": {
+			in: [][]string{{"a", "a", "b"}},
+			expected: []string{"a", "a", "b"},
+		},
 		"two arrays": {
 			in: [][]string{{"a", "b", "c"}, {"b", "c", "d"}},
 			expected: []string{"b", "c"},
@@ -219,10 +227,27 @@ func TestLastIndexOf(t *testing.T) {
 }
 
 func TestMinMax(t *testing.T) {
-	arr := []int{10, 2, 1, 4, 19}
-
-	require.Equal(t, 19, Max(arr), "max")
-	require.Equal(t, 1, Min(arr), "min")
+	tests := map[string]struct{
+		in []int
+		max int
+		min int
+	}{
+		"simple array": {
+			in: []int{10, 2, 1, 4, 19},
+			max: 19,
+			min: 1,
+		},
+		"zero array": {
+			in : nil,
+			max: 0,
+			min: 0,
+		},
+	}
+	
+	for title, tt := range tests {
+		require.Equal(t, tt.max, Max(tt.in), title)
+		require.Equal(t, tt.min, Min(tt.in), title)
+	}
 }
 
 func TestReverse(t *testing.T) {

@@ -97,7 +97,12 @@ func Contains[A ~[]T, T comparable](arr A, value T) bool {
 }
 
 // Max returns the maximum value from the slice.
+// If input slice is empty it returns a default value for input type.
 func Max[A ~[]T, T constraints.Ordered](arr A) T {
+	if len(arr) == 0 {
+		return defaultvalue[T]()
+	}
+
 	e := arr[0]
 
 	for i := 1; i < len(arr); i++ {
@@ -110,7 +115,12 @@ func Max[A ~[]T, T constraints.Ordered](arr A) T {
 }
 
 // Min returns the minimum value from the slice.
+// If input slice is empty it returns a default value for input type.
 func Min[A ~[]T, T constraints.Ordered](arr A) T {
+	if len(arr) == 0 {
+		return defaultvalue[T]()
+	}
+
 	e := arr[0]
 
 	for i := 1; i < len(arr); i++ {
@@ -261,4 +271,9 @@ func Reverse[A ~[]T, T comparable](arr A) {
 	for i := 0; i < len(arr)/2; i++ {
 		arr[i], arr[len(arr)-i-1] = arr[len(arr)-i-1], arr[i]
 	}
+}
+
+func defaultvalue[T any]() T {
+	n := new(T)
+	return *n
 }
